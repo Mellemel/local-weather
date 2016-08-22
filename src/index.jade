@@ -5,3 +5,33 @@ html(lang='en')
     meta(name='keywords', content='random, quote, generator')
     meta(name='author', content='Melvin Canela')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no')
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+
+    title The Local Weather
+
+    link(rel='icon', href='./favicon.ico' type='image/x-icon')
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
+    link(rel='stylesheet', href='./css/custom.css')
+
+    script(src="http://l2.io/ip.js?var=myip")
+    script(src="https://code.jquery.com/jquery-3.1.0.min.js", integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=", crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+    script(src='./js/app.js')
+  body
+    .container-fluid.text-center
+      .row 
+        h1.col-md-8.col-md-offset-2 How's the local fucking weather in #[span.unit fahrenheit!?]
+      .row
+        #today.col-md-6.col-md-offset-3
+      .table-reponsinve
+        table.table
+         thead
+          tr
+            th Day
+            th Date
+            th High
+            th Low
+            th Notes
+         tbody
+          - for (var x = 0; x < 8; x++)
+            tr.day
