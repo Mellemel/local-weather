@@ -6,24 +6,36 @@ function WeatherModel(data) {
   this.location = data.location
   this.currentWeather = data.currentWeather
   this.forecast = data.forecast
+  this.unit = 'F'
 
   this.unitChange = new Event(this)
 }
 
 WeatherModel.prototype = {
-  toCelsius: function () {
-    this.currentWeather.temp = (this.currentWeather.temp - 32) * 5 / 9
-    this.forecast.forEach((day) => {
-      day.high = (day.high - 32) * 5 / 9
-      day.high = (day.high - 32) * 5 / 9
-    })
+  toCelsius: function (num) {
+    return Math.round((num - 32) * 5 / 9)
   },
-  toFahrenheit: function () {
-    this.currentWeather.temp = (this.currentWeather.temp * 9 / 5) - 32
-    this.forecast.forEach((day) => {
-      day.high = (day.high * 9 / 5) - 32
-      day.high = (day.high * 9 / 5) - 32
-    })
+  toFahrenheit: function (num) {
+    return Math.round((num * 9 / 5) + 32)
+  },
+  convertUnit: function () {
+    if (this.unit === 'F') {
+      this.currentWeather.temp = this.toCelsius(this.currentWeather.temp)
+      this.forecast.forEach((day) => {
+        day.high = this.toCelsius(day.high)
+        day.low = this.toCelsius(day.low)
+      })
+      this.unit = 'C'
+      this.unitChange.notify()
+    } else {
+      this.currentWeather.temp = this.toFahrenheit(this.currentWeather.temp)
+      this.forecast.forEach((day) => {
+        day.high = this.toFahrenheit(day.high)
+        day.low = this.toFahrenheit(day.low)
+      })
+      this.unit = 'F'
+      this.unitChange.notify()
+    }
   }
 }
 
@@ -44,11 +56,6 @@ function WeatherView(model, elements) {
   this._model.unitChange.attach(() => {
     _this.convertUnits()
   })
-
-  // attach listeners to HTML controls
-  this._elements.unitButton.click(() => {
-    _this.unitButtonClicked.notify()
-  })
 }
 
 WeatherView.prototype = {
@@ -62,21 +69,44 @@ WeatherView.prototype = {
 
     cc.html(
       '<h3>' + model.currentWeather.date + '</h3>' +
-      '<h1>' + model.currentWeather.temp + '<span>&deg;F</span></h1>' +
+      '<h1><span id="todayWeather">' + model.currentWeather.temp + '</span>&deg;<button id="button" class="unit btn btn-primary">F</button></h1>' +
       '<h3>' + model.currentWeather.text + '</h3>'
     )
 
     forecast.html((index) => {
       return '<td>' + model.forecast[index].day + '</td>' +
         '<td>' + model.forecast[index].date + '</td>' +
-        '<td>' + model.forecast[index].high + '<span class="unit">&deg;F</span></td>' +
-        '<td>' + model.forecast[index].low + '<span class="unit">&deg;F</span></td>' +
+        '<td><span class="hweather">' + model.forecast[index].high + '</span>&deg;<span class="unit">F</span></td>' +
+        '<td><span class="lweather">' + model.forecast[index].low + '</span>&deg;<span class="unit">F</span></td>' +
         '<td>' + model.forecast[index].text + '</td>'
     })
+    return this
 
   },
-  convertUnits: function () {
+  init: function () {
+    this._elements.button = $('#button')
+    this._elements.unit = $('.unit')
+    this._elements.todayWeather = $('#todayWeather')
+    this._elements.highWeather = $('.hweather')
+    this._elements.lowWeather = $('.lweather')
 
+    // attach listeners to HTML controls
+    var _this = this
+    this._elements.button.click(() => {
+      _this.unitButtonClicked.notify()
+    })
+  },
+  convertUnits: function () {
+    this._elements.unit.text(this._model.unit)
+
+    this._elements.todayWeather.text(this._model.currentWeather.temp)
+
+    this._elements.highWeather.text((index) => {
+      return this._model.forecast[index].high
+    })
+    this._elements.lowWeather.text((index) => {
+      return this._model.forecast[index].low
+    })
   }
 }
 
@@ -86,6 +116,19 @@ WeatherView.prototype = {
  */
 function WeatherCtrl(model, view) {
   this._model = model
+  this._view = view
+
+  var _this = this
+
+  this._view.unitButtonClicked.attach(() => {
+    _this.convertUnit()
+  })
+}
+
+WeatherCtrl.prototype = {
+  convertUnit: function () {
+    this._model.convertUnit()
+  }
 }
 
 function Event(sender) {
@@ -94,10 +137,10 @@ function Event(sender) {
 }
 
 Event.prototype = {
-  attach: function(listener) {
+  attach: function (listener) {
     this._listeners.push(listener)
   },
-  notify: function(args) {
+  notify: function (args) {
     for (let i = 0; i < this._listeners.length; i++) {
       this._listeners[i](this._sender, args)
     }

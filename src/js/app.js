@@ -41,17 +41,19 @@ $(document).ready(() => {
         var model = new weather.Model(intel)
         var view = new weather.View(model, {
           location: $('#location'),
-          unitButton: $('#button'),
           currentWeather: $('#today'),
           forecast: $('.day')
         })
         var controller = new weather.Ctrl(model, view)
 
-        view.show()
+        view.show().init()
       })
     })
     function sanitizeData(data) {
-      data.currentWeather.date = new Date(data.currentWeather.date)
+      let dateOptions = {
+        weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      }
+      data.currentWeather.date = new Date(data.currentWeather.date).toLocaleTimeString('en-us', dateOptions).replace(/,\s/g, '-')
       data.currentWeather.temp = parseInt(data.currentWeather.temp)
       data.forecast.forEach((object) => {
         object.high = parseInt(object.high)
