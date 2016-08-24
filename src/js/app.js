@@ -1,4 +1,5 @@
-var weather = require('./weather.js')
+var weather = require('./weather.js'), moment = require('moment')
+require('moment/locale/cs')
 
 $(document).ready(() => {
 
@@ -37,7 +38,7 @@ $(document).ready(() => {
         }
 
         sanitizeData(intel)
-        
+
         var model = new weather.Model(intel)
         var view = new weather.View(model, {
           location: $('#location'),
@@ -50,11 +51,13 @@ $(document).ready(() => {
       })
     })
     function sanitizeData(data) {
-      let dateOptions = {
-        weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-      }
-      data.currentWeather.date = new Date(data.currentWeather.date).toLocaleTimeString('en-us', dateOptions).replace(/,\s/g, '-')
+      let tmpDate = moment.utc(new Date(data.currentWeather.date).toISOString())
+      console.log(data.currentWeather.date)
+      data.currentWeather.date = tmpDate.locale('en').format('ddd, MMM Do YYYY h:mm A')
+      console.log(data.currentWeather.date)
+
       data.currentWeather.temp = parseInt(data.currentWeather.temp)
+      
       data.forecast.forEach((object) => {
         object.high = parseInt(object.high)
         object.low = parseInt(object.low)

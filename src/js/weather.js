@@ -69,8 +69,9 @@ WeatherView.prototype = {
 
     cc.html(
       '<h3>' + model.currentWeather.date + '</h3>' +
-      '<h1><span id="todayWeather">' + model.currentWeather.temp + '</span>&deg;<button id="button" class="unit btn btn-primary">F</button></h1>' +
-      '<h3>' + model.currentWeather.text + '</h3>'
+      '<h3>' + model.currentWeather.text + '</h3>' +
+      '<h2><span id="todayWeather">' + model.currentWeather.temp + '</span>&deg;<button id="button" class="unit btn btn-primary">F</button></h2>'
+      
     )
 
     forecast.html((index) => {
