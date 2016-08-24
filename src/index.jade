@@ -13,25 +13,28 @@ html(lang='en')
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
     link(rel='stylesheet', href='./css/custom.css')
 
-    script(src="http://l2.io/ip.js?var=myip")
     script(src="https://code.jquery.com/jquery-3.1.0.min.js", integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=", crossorigin="anonymous")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
     script(src='./js/app.js')
   body
     .container-fluid.text-center
       .row 
-        h1.col-md-8.col-md-offset-2 How's the local fucking weather in #[span.unit fahrenheit!?]
+        h1.col-md-8.col-md-offset-2 How's the local fucking weather in #[span#location New York, NY] !?
       .row
         #today.col-md-6.col-md-offset-3
+          h3 23, August 2016
+          h1 92&deg;#[span#button F]
+          h3 Sunny
       .table-reponsinve
         table.table
-         thead
-          tr
-            th Day
-            th Date
-            th High
-            th Low
-            th Notes
-         tbody
-          - for (var x = 0; x < 8; x++)
-            tr.day
+          h3 7-Day Forecast
+          thead
+            tr
+              th Day
+              th Date
+              th High
+              th Low
+              th Notes
+          tbody
+            - for (var x = 0; x < 8; x++)
+              tr.day
