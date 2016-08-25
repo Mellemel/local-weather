@@ -36,7 +36,7 @@ gulp.task('jade', () => {
 })
 
 gulp.task('sass', () => {
-  return gulp.src('./src/sass/**/*.scss')
+  return gulp.src('./src/sass/custom.scss')
     .pipe(changed('./public/css/'))
     .pipe(sass().on('error', gutil.log))
     .pipe(autoPrefix())

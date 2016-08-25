@@ -69,9 +69,10 @@ WeatherView.prototype = {
 
     cc.html(
       '<h3>' + model.currentWeather.date + '</h3>' +
-      '<h3>' + model.currentWeather.text + '</h3>' +
-      '<h2><span id="todayWeather">' + model.currentWeather.temp + '</span>&deg;<button id="button" class="unit btn btn-primary">F</button></h2>'
-      
+      '<h2><span id="todayWeather">' + model.currentWeather.temp + '</span>&deg;<button id="button" class="unit btn btn-primary">F</button></h2>' +
+      this.displayAnimation(model.currentWeather.text) +
+      '<h3>' + model.currentWeather.text + '</h3>'
+
     )
 
     forecast.html((index) => {
@@ -79,7 +80,7 @@ WeatherView.prototype = {
         '<td>' + model.forecast[index].date + '</td>' +
         '<td><span class="hweather">' + model.forecast[index].high + '</span>&deg;<span class="unit">F</span></td>' +
         '<td><span class="lweather">' + model.forecast[index].low + '</span>&deg;<span class="unit">F</span></td>' +
-        '<td>' + model.forecast[index].text + '</td>'
+        '<td>' + this.displaySymbol(model.forecast[index].text) + ' ' + model.forecast[index].text + '</td>'
     })
     return this
 
@@ -108,6 +109,28 @@ WeatherView.prototype = {
     this._elements.lowWeather.text((index) => {
       return this._model.forecast[index].low
     })
+  },
+  displaySymbol: function (string) {
+    if (/sunny/gi.test(string)) {
+      return '<i class="wi wi-day-sunny"></i>'
+    } else if (/cloudy/gi.test(string)) {
+      return '<i class="wi wi-cloudy"></i>'
+    } else if (/thunderstorm/gi.test(string)) {
+      return '<i class="wi wi-thunderstorm"></i>'
+    }
+  },
+  displayAnimation: function (string) {
+    if (/sunny/gi.test(string)) {
+      return '<div class="icon sunny"><div class="sun"><div class="rays"></div></div></div>'
+    } else if (/cloudy/gi.test(string)) {
+      return '<div class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>'
+    } else if (/thunderstorm/gi.test(string)) {
+      return '<div class="icon thunder-storm"><div class="cloud"></div><div class="lightning"><div class="bolt"></div><div class="bolt"></div></div></div>'
+    } else if (/snow/gi.test(string)) {
+      return '<div class="icon flurries"><div class="cloud"></div><div class="snow"><div class="flake"></div><div class="flake"></div></div></div>'
+    } else if (/shower/gi.test(string)){
+      return '<div class="icon rainy"><div class="cloud"></div><div class="rain"></div></div>'
+    }
   }
 }
 
