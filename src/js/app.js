@@ -24,7 +24,7 @@ $(document).ready(() => {
 
       // get weather info from yahooapis
       let w = {
-        url: 'http://query.yahooapis.com/v1/public/yql?q=',
+        url: 'https://query.yahooapis.com/v1/public/yql?q=',
         query: encodeURI('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + city + ', ' + state + '")'),
         setting: '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
       }
